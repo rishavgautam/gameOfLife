@@ -8,11 +8,14 @@ from soupsieve import select
 
 
 class GameofLife(object):
-    def __init__(self, width, height):
-        self.columns = int(height)
-        self.rows = int(width)
-        self.size = (self.rows, self.columns)
+    def __init__(self, size):
+        self.columns = int(size)
+        self.rows = int(size)
+        self.size = size
         self.grid_array = [[0 for i in range(self.rows)] for j in range(self.columns)] #creating list of lists
+        
+        
+        
         self.ticks = 0
         
     def random(self):
@@ -49,7 +52,7 @@ class GameofLife(object):
     
     #Main logic of the program.
     def conway_assignment_two(self):
-        next = np.ndarray(shape=(self.size))
+        next = np.ndarray(shape=(self.rows, self.columns))
         
         #If the cell is alive, then it stays alive if it has either 2 or 3 live neighbors
         #If the cell is dead, then it springs to life only in the case that it has 3 live neighbors
@@ -119,14 +122,13 @@ class GameofLife(object):
 
 
 if __name__ == '__main__':
-    x = int(input("Enter size of the board: "))
+    size = int(input("Enter size of the board: "))
     states = int(input("Please enter state type \n 1. Blinker \n 2. Glider Gun \n 3. Random \n 4. Personal \n Please enter your choice: "))
     time_steps = int(input("Please enter number of steps to run the program: "))
-    width = x
-    height = x
+    
     boardHistory = []
     
-    object = GameofLife(width,height)
+    object = GameofLife(size)
 
     if states == 3:
         grid = object.random()
@@ -164,7 +166,7 @@ if __name__ == '__main__':
         dead += object.getDead()
         return [mat], alive, dead
     
-    grid, alive, dead = plotData(1)
+    data, alive, dead = plotData(1)
     
 
     asd = animation.FuncAnimation(fig, plotData, interval=50, save_count=50)

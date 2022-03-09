@@ -23,6 +23,7 @@ def get_neighbors(board, x, y):
 def simulation(grid):
     rows = 0
     cols = 0
+
     def neighbor_fn(item):
         nonlocal rows, cols, grid
         neighbor = get_neighbors(grid, rows, cols)
@@ -46,15 +47,16 @@ def simulation(grid):
 # print(grid_array)
 
 # glider
-# grid = np.full((size, size), 0)
+grid = np.full((size, size), 0)
 
-# grid[0][0] = 1
-# grid[1][1] = 1
-# grid[1][2] = 1
-# grid[2][0] = 1
-# grid[2][1] = 1
+grid[0][0] = 1
+grid[1][1] = 1
+grid[1][2] = 1
+grid[2][0] = 1
+grid[2][1] = 1
 
 
+# grid = np.random.choice([0,1], (size, size))
 
 def animate(frameNum):
     global grid,img
@@ -62,7 +64,6 @@ def animate(frameNum):
     img.set_data(grid)
 
 
-grid = np.random.choice([0,1], (size, size))
 fig, ax = plt.subplots()
 img = plt.imshow(grid, cmap ='Blues')
 
