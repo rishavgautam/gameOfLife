@@ -4,6 +4,7 @@ import datetime
 import matplotlib.pyplot as plt 
 import matplotlib.animation as animation
 from soupsieve import select
+from sympy import false, true
 
 
 
@@ -49,12 +50,50 @@ class GameofLife(object):
         return self.grid_array
 
 
-    def simulation(self, grid):
+
+    #Main logic of the program.
+    def conway_assignment_two(self):
+        next = np.ndarray(shape=(self.rows, self.columns))
+        
+        #If the cell is alive, then it stays alive if it has either 2 or 3 live neighbors
+        #If the cell is dead, then it springs to life only in the case that it has 3 live neighbors
+        for x in range(self.rows):
+            for y in range(self.columns):
+                state = self.grid_array[x][y]
+                neighbours = self.findNeighbors_two(x, y)
+                
+                if state == 0 and neighbours == 3:
+                    next[x][y] = 1
+                elif state == 1 and (neighbours < 2 or neighbours > 3):
+                    next[x][y] = 0
+                else:
+                    next[x][y] = state
+        self.grid_array = next
+        # self.ticks +=1
+        return self.grid_array
+
+
+    def findNeighbors_two(self, x, y):
+        total = 0
+        for n in range(-1, 2):
+            for m in range(-1, 2):
+                x_edge = (x+n+self.rows) % self.rows
+                y_edge = (y+m+self.columns) % self.columns
+                total += self.grid_array[x_edge][y_edge]
+        total -= self.grid_array[x][y]
+        return total
+
+
+
+
+
+
+    def conway_assignment_three(self, grid_board):
         rows = 0
         cols = 0
     
         def neighbor_fn(item):
-            nonlocal rows, cols, grid
+            nonlocal rows, cols, grid_board
             neighbor = self.get_neighbors(rows, cols)
             cols += 1
             if(cols % size == 0):
@@ -63,14 +102,14 @@ class GameofLife(object):
             return neighbor
 
         neighbors  = np.array(list(map(neighbor_fn, range(size ** 2))))
-        grid_vec = grid.reshape(size ** 2)
+        grid_vec = grid_board.reshape(size ** 2)
 
         newly_born = (neighbors == 3) & (grid_vec == 0)
         survived = ((neighbors == 2) | (neighbors == 3)) & grid_vec == 1
 
         new_grid = np.full(size ** 2, 0)
         new_grid[newly_born | survived] = 1
-        self.ticks +=1
+        # self.ticks +=1
         return new_grid.reshape((size, size))
 
     
@@ -86,9 +125,17 @@ class GameofLife(object):
         right = (y + 1) % size
 
         neighbors = board[top][left]    + board[top][y]    + board[top][right] + \
-                    board[x][left]      +                              board[x][right] + \
+                    board[x][left]      +                    board[x][right] + \
                     board[bottom][left] + board[bottom][y] + board[bottom][right]
         return neighbors
+
+
+
+
+
+
+
+
 
 
     def getAlive(self):
@@ -115,6 +162,7 @@ if __name__ == '__main__':
     states = int(input("Please enter state type \n 1. Blinker \n 2. Glider Gun \n 3. Random \n 4. Personal \n Please enter your choice: "))
     time_steps = int(input("Please enter number of steps to run the program: "))
     boardHistory = []
+    historyRequired = False
     
     object = GameofLife(size)
 
@@ -135,53 +183,97 @@ if __name__ == '__main__':
     
 
         
-    def animate(frameNum):
+    def visualize(frameNum):
         alive = 0
         dead = 0
         global grid, im
-        grid = object.simulation(grid)
-        im.set_data(grid)
+        grid = object.conway_assignment_three(grid)
+        im1.set_data(grid)
 
         if object.getTicks() > time_steps:
             plt.close()
 
         alive += object.getAlive()
         dead += object.getDead()
-        return [mat], alive, dead
+        return [mat1], alive, dead
 
+
+    fig1, ax1 = plt.subplots()
+    mat1 = ax1.matshow(grid)
+    im1 = plt.imshow(grid, cmap ='Blues')
+    ax1.set_title('Conway Assignment Three')
+    data, alive, dead = visualize(1)
+
+    _ = animation.FuncAnimation(fig1, visualize, interval=50)
+
+
+
+
+
+
+    # Assignment two
 
     fig, ax = plt.subplots()
     mat = ax.matshow(grid)
     im = plt.imshow(grid, cmap ='Blues')
+    ax.set_title('Conway Assignment Two')
 
-    data, alive, dead = animate(1)
 
-    _ = animation.FuncAnimation(fig, animate, interval=10)
-    plt.show()
 
-    # def plotData(d):
-    #     alive = 0
-    #     dead = 0
-    #     dataFromBoard = object.conway_assignment_two()
-    #     mat.set_data(dataFromBoard)
-    #     im.set_data(dataFromBoard)
-    #     if object.getTicks() > time_steps:
-    #         plt.close()
+    def plotData(d):
+        alive = 0
+        dead = 0
+        dataFromBoard = object.conway_assignment_two()
+        mat.set_data(dataFromBoard)
+        im.set_data(dataFromBoard)
+        if object.getTicks() > time_steps:
+            plt.close()
 
-    #     alive += object.getAlive()
-    #     dead += object.getDead()
-    #     return [mat], alive, dead
+        alive += object.getAlive()
+        dead += object.getDead()
+        return [mat], alive, dead
     
     # grid, alive, dead = plotData(1)
     
 
-    # asd = animation.FuncAnimation(fig, plotData, interval=50, save_count=50)
-    # plt.show()
+    asd = animation.FuncAnimation(fig, plotData, interval=50)
+    plt.show()
+
+
+
+    def gridHistory():
+        if historyRequired:
+            for i in range(0, time_steps+1):
+                dataFromBoard = object.conway_assignment_three()
+                boardHistory.append(dataFromBoard)
+                return boardHistory
+        else:
+            return 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     t2 = datetime.datetime.now() #Final time when the simulation ends after N time steps
     t_1 = t1.timestamp() 
     t_2 = t2.timestamp()
     diff = t_2-t_1
+
+
+
 
 
     # Shows a graph of all the process30es carried out
