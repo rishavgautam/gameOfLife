@@ -48,9 +48,6 @@ class GameofLifeTwo(object):
     #Main logic of the program.
     def conway_assignment_two(self):
         next = np.ndarray(shape=(self.rows, self.columns))
-        
-        #If the cell is alive, then it stays alive if it has either 2 or 3 live neighbors
-        #If the cell is dead, then it springs to life only in the case that it has 3 live neighbors
         for x in range(self.rows):
             for y in range(self.columns):
                 state = self.grid_array[x][y]

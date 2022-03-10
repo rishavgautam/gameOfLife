@@ -18,7 +18,7 @@ class GameofLifeTwo(object):
         for x in range(self.rows):
             for y in range(self.columns):
                 self.grid_array[x][y] = random.randint(0,1)
-                self.grid_array[x][y] = np.random.choice((0,1), p=[0.5, 0.5])
+                # self.grid_array[x][y] = np.random.choice((0,1), p=[0.5, 0.5])
         return self.grid_array
 
     def blinker(self):

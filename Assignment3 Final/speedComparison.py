@@ -1,9 +1,12 @@
+from cProfile import label
+from itertools import chain
 import numpy as np
 import random
 import datetime
 import matplotlib.pyplot as plt 
 import matplotlib.animation as animation
-
+import argparse
+from matplotlib import style
 
 
 class GameofLifeTwo(object):
@@ -49,11 +52,9 @@ class GameofLifeTwo(object):
 
 
     #Main logic of the program.
-    def conway_assignment_two(self):
+    def conway_assignment_two(self, x):
+        self.grid_array = x
         next = np.ndarray(shape=(self.rows, self.columns))
-        
-        #If the cell is alive, then it stays alive if it has either 2 or 3 live neighbors
-        #If the cell is dead, then it springs to life only in the case that it has 3 live neighbors
         for x in range(self.rows):
             for y in range(self.columns):
                 state = self.grid_array[x][y]
@@ -213,20 +214,43 @@ class GameofLifeThree(object):
 
 
 if __name__ == '__main__':
-    # size = int(input("Enter size of the board: "))
-    states = int(input("Please enter state type \n 1. Blinker \n 2. Glider Gun \n 3. Random \n 4. Personal \n Please enter your choice: "))
-    # time_steps = int(input("Please enter number of steps to run the program: "))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-si", "--size", help="Enter size of the board", type=int)
+    parser.add_argument("-st", "--state", help="Please enter the state", type=int)
+    parser.add_argument("-ts", "--time_steps", help="Enter time steps to run the program", type=int)
+    args = parser.parse_args()
+    
+    size = args.size
+    states = args.state
+    time_steps = args.time_steps
+
+
     boardHistory = []
-    historyRequired = False
+    object_two = GameofLifeTwo(size)
+    object_three = GameofLifeThree(size)
+
+
+    if states == 3:
+        grid = object_two.random()
+        gridBoard = object_three.random()
+    elif states == 1:
+        grid = object_two.blinker()
+        gridBoard = object_three.blinker()
+    elif states == 2:
+        grid = object_two.glider()
+        gridBoard = object_three.glider()
+    elif states == 4:
+        grid = object_two.personal()
+        gridBoard = object_three.personal()
+    else:
+        print("Sorry no pattern selected")
     
-    
-    time_steps = 40
-    size = 2
-    t1 = datetime.datetime.now()
-    
-    for i in range(time_steps):
-        t1 = datetime.datetime.now()
-        size += 5
+    assignment2 = []
+    assignment3 = []
+    boardSize = []
+    for j in range(4):
+        size += 25
+        boardSize.append(size)
         object_two = GameofLifeTwo(size)
         object_three = GameofLifeThree(size)
 
@@ -243,35 +267,39 @@ if __name__ == '__main__':
             grid = object_two.personal()
             gridBoard = object_three.personal()
         else:
-            print("Sorry no pattern selected")
+            print("Sorry no pattern selected")  
 
+        t1 = datetime.datetime.now()
+        dataFromBoard = grid
 
-        # # Assignment two
-
-        # fig, ax = plt.subplots()
-        # mat = ax.matshow(grid)
-        # im = plt.imshow(grid, cmap ='Blues')
-        # ax.set_title('Conway Assignment Two')
-
-        # def plotData(d):
-        #     alive = 0
-        #     dead = 0
-        #     dataFromBoard = object_two.conway_assignment_two()
-        #     mat.set_data(dataFromBoard)
-        #     im.set_data(dataFromBoard)
-        #     if object_two.getTicks() > time_steps:
-        #         plt.close()
-
-        #     alive += object_two.getAlive()
-        #     dead += object_two.getDead()
-        #     return [mat], alive, dead
+        for i in range(time_steps):
+            dataFromBoard = object_two.conway_assignment_two(dataFromBoard)
         
+    
+        t2 = datetime.datetime.now()
+        diff = ((t2-t1).seconds)*1000
+        timePlot = 100/diff
+        assignment2.append(timePlot)
+
+
+
+        t3 = datetime.datetime.now()
+        for i in range(time_steps):
+            gridBoard = object_three.conway_assignment_three(gridBoard)        
         
+        t4 = datetime.datetime.now()
+        diff = ((t4-t3).seconds)*1000
+        timePlot2 = 100/diff
+        assignment3.append(timePlot2)
 
-        # asd = animation.FuncAnimation(fig, plotData, interval=50)
-        # plt.show()
-    t2 = datetime.datetime.now()
-    print(t1)
-    print(t2)
 
- 
+    
+
+    style.use('seaborn')
+    plt.plot(boardSize, assignment2, label="Assignemnt 2")
+    plt.plot(boardSize, assignment3, label="Assignment 3")
+    plt.title('Variable Board Sizes')
+    plt.xlabel('Screen Size')
+    plt.ylabel('Time steps/milliseconds')
+    plt.legend()
+    plt.show()

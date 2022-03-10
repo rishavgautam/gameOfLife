@@ -68,8 +68,8 @@ class GameofLifeThree(object):
 
 
 if __name__ == '__main__':
-    size = 100
-    time_steps = 200
+    size = 300
+    time_steps = 5
     object_three = GameofLifeThree(size)
     gridBoard = object_three.random()
     alive = []
@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
         ax1.plot(timeData, alive, color = 'g', label="Alive")
         ax1.plot(timeData, dead, color = 'r', label="Dead")
-
+        
         if frameNum == size:
             plt.close()
         return alv, nonAlv
@@ -98,12 +98,15 @@ if __name__ == '__main__':
     style.use('seaborn')
     fig = plt.figure(figsize=(12, 7))
     ax1 = fig.add_subplot(1,1,1)
+    
 
     ax1.set_title('Alive vs Dead Cell')
 
     plt.xlabel("Number of time steps")
     plt.ylabel("Alive vs Dead Count")
     ani = animation.FuncAnimation(fig, visualize, interval=50)
+    
+
     plt.show()
 
     t2 = datetime.datetime.now()
