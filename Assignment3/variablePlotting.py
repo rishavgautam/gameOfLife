@@ -89,7 +89,6 @@ class GameofLifeTwo(object):
         for i in range(self.rows):
             for j in range(self.columns):
                 if self.grid_array[i][j]==1:
-                    print(count)
                     count +=1
         return count
 
@@ -261,65 +260,36 @@ if __name__ == '__main__':
         dead += object_two.getDead()
         return [mat], alive, dead
     
-    grid, alive, dead = plotData(1)
     
 
     asd = animation.FuncAnimation(fig, plotData, interval=50)
 
+    def visualize(frameNum):
+        alive = 0
+        dead = 0
+        global gridBoard, im
+        gridBoard = object_three.conway_assignment_three(gridBoard)
+        im1.set_data(gridBoard)
 
-    # def gridHistory():
-    #     if historyRequired:
-    #         for i in range(0, time_steps+1):
-    #             dataFromBoard = object_two.conway_assignment_two()
-    #             boardHistory.append(dataFromBoard)
-    #             return boardHistory
-    #     else:
-    #         return 0
+        if object_three.getTicks() > time_steps:
+            plt.close()
 
-    
+        alive += object_three.getAlive()
+        dead += object_three.getDead()
 
-
-    # def visualize(frameNum):
-    #     alive = 0
-    #     dead = 0
-    #     global gridBoard, im
-    #     gridBoard = object_three.conway_assignment_three(gridBoard)
-    #     im1.set_data(gridBoard)
-
-    #     if object_three.getTicks() > time_steps:
-    #         plt.close()
-
-    #     alive += object_three.getAlive()
-    #     dead += object_three.getDead()
-
-    #     return [mat1], alive, dead
+        return [mat1], alive, dead
 
 
-    # fig1, ax1 = plt.subplots()
-    # mat1 = ax1.matshow(gridBoard)
-    # im1 = plt.imshow(gridBoard, cmap ='Blues')
-    # ax1.set_title('Conway Assignment Three')
-    # data, alive, dead = visualize(1)
+    fig1, ax1 = plt.subplots()
+    mat1 = ax1.matshow(gridBoard)
+    im1 = plt.imshow(gridBoard, cmap ='Blues')
+    ax1.set_title('Conway Assignment Three')
+    data, alive, dead = visualize(1)
 
-    # _ = animation.FuncAnimation(fig1, visualize, interval=50)
+    _ = animation.FuncAnimation(fig1, visualize, interval=50)
 
 
     plt.show()
 
 
-
-    t2 = datetime.datetime.now()
-    diff = t2.second - t1.second
-
-
-
-
-    # Shows a graph of all the process30es carried out
-    print("\n\n\n STATISTICS OF THE RUN \n =====================")
-    print("Start time:", t1)
-    print("End time:", t2)
-    print("Total Duration:", diff*1000, "milliseconds")
-    print("Total Alive:", alive)
-    print("Total Dead:", dead)
-    print("Number of frames processed", time_steps / diff)
  

@@ -89,7 +89,6 @@ class GameofLifeTwo(object):
         for i in range(self.rows):
             for j in range(self.columns):
                 if self.grid_array[i][j]==1:
-                    print(count)
                     count +=1
         return count
 
@@ -214,112 +213,65 @@ class GameofLifeThree(object):
 
 
 if __name__ == '__main__':
-    size = int(input("Enter size of the board: "))
+    # size = int(input("Enter size of the board: "))
     states = int(input("Please enter state type \n 1. Blinker \n 2. Glider Gun \n 3. Random \n 4. Personal \n Please enter your choice: "))
-    time_steps = int(input("Please enter number of steps to run the program: "))
+    # time_steps = int(input("Please enter number of steps to run the program: "))
     boardHistory = []
     historyRequired = False
     
-    object_two = GameofLifeTwo(size)
-    object_three = GameofLifeThree(size)
-
-    if states == 3:
-        grid = object_two.random()
-        gridBoard = object_three.random()
-    elif states == 1:
-        grid = object_two.blinker()
-        gridBoard = object_three.blinker()
-    elif states == 2:
-        grid = object_two.glider()
-        gridBoard = object_three.glider()
-    elif states == 4:
-        grid = object_two.personal()
-        gridBoard = object_three.personal()
-    else:
-        print("Sorry no pattern selected")
-
-    t1= datetime.datetime.now() #Gives initial time when the simulation starts
     
+    time_steps = 40
+    size = 2
+    t1 = datetime.datetime.now()
     
-    # Assignment two
+    for i in range(time_steps):
+        t1 = datetime.datetime.now()
+        size += 5
+        object_two = GameofLifeTwo(size)
+        object_three = GameofLifeThree(size)
 
-    fig, ax = plt.subplots()
-    mat = ax.matshow(grid)
-    im = plt.imshow(grid, cmap ='Blues')
-    ax.set_title('Conway Assignment Two')
-
-    def plotData(d):
-        alive = 0
-        dead = 0
-        dataFromBoard = object_two.conway_assignment_two()
-        mat.set_data(dataFromBoard)
-        im.set_data(dataFromBoard)
-        if object_two.getTicks() > time_steps:
-            plt.close()
-
-        alive += object_two.getAlive()
-        dead += object_two.getDead()
-        return [mat], alive, dead
-    
-    grid, alive, dead = plotData(1)
-    
-
-    asd = animation.FuncAnimation(fig, plotData, interval=50)
+        if states == 3:
+            grid = object_two.random()
+            gridBoard = object_three.random()
+        elif states == 1:
+            grid = object_two.blinker()
+            gridBoard = object_three.blinker()
+        elif states == 2:
+            grid = object_two.glider()
+            gridBoard = object_three.glider()
+        elif states == 4:
+            grid = object_two.personal()
+            gridBoard = object_three.personal()
+        else:
+            print("Sorry no pattern selected")
 
 
-    # def gridHistory():
-    #     if historyRequired:
-    #         for i in range(0, time_steps+1):
-    #             dataFromBoard = object_two.conway_assignment_two()
-    #             boardHistory.append(dataFromBoard)
-    #             return boardHistory
-    #     else:
-    #         return 0
+        # # Assignment two
 
-    
+        # fig, ax = plt.subplots()
+        # mat = ax.matshow(grid)
+        # im = plt.imshow(grid, cmap ='Blues')
+        # ax.set_title('Conway Assignment Two')
 
+        # def plotData(d):
+        #     alive = 0
+        #     dead = 0
+        #     dataFromBoard = object_two.conway_assignment_two()
+        #     mat.set_data(dataFromBoard)
+        #     im.set_data(dataFromBoard)
+        #     if object_two.getTicks() > time_steps:
+        #         plt.close()
 
-    # def visualize(frameNum):
-    #     alive = 0
-    #     dead = 0
-    #     global gridBoard, im
-    #     gridBoard = object_three.conway_assignment_three(gridBoard)
-    #     im1.set_data(gridBoard)
+        #     alive += object_two.getAlive()
+        #     dead += object_two.getDead()
+        #     return [mat], alive, dead
+        
+        
 
-    #     if object_three.getTicks() > time_steps:
-    #         plt.close()
-
-    #     alive += object_three.getAlive()
-    #     dead += object_three.getDead()
-
-    #     return [mat1], alive, dead
-
-
-    # fig1, ax1 = plt.subplots()
-    # mat1 = ax1.matshow(gridBoard)
-    # im1 = plt.imshow(gridBoard, cmap ='Blues')
-    # ax1.set_title('Conway Assignment Three')
-    # data, alive, dead = visualize(1)
-
-    # _ = animation.FuncAnimation(fig1, visualize, interval=50)
-
-
-    plt.show()
-
-
-
+        # asd = animation.FuncAnimation(fig, plotData, interval=50)
+        # plt.show()
     t2 = datetime.datetime.now()
-    diff = t2.second - t1.second
+    print(t1)
+    print(t2)
 
-
-
-
-    # Shows a graph of all the process30es carried out
-    print("\n\n\n STATISTICS OF THE RUN \n =====================")
-    print("Start time:", t1)
-    print("End time:", t2)
-    print("Total Duration:", diff*1000, "milliseconds")
-    print("Total Alive:", alive)
-    print("Total Dead:", dead)
-    print("Number of frames processed", time_steps / diff)
  

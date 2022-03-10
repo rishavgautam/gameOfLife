@@ -5,4 +5,8 @@ parser.add_argument("-n1", "--input2", help="display a square of a given number"
 
 args = parser.parse_args()
 
-print(args.input1+args.input2)
+x = args.n1
+print(x)
+
+
+# print(args.input1+args.input2)

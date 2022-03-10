@@ -2,7 +2,7 @@ import numpy as np
 import random
 import matplotlib.pyplot as plt 
 import matplotlib.animation as animation
-
+import argparse
 
 
 class GameofLifeTwo(object):
@@ -79,12 +79,19 @@ class GameofLifeTwo(object):
    
     
 if __name__ == '__main__':
-    size = int(input("Enter size of the board: "))
-    states = int(input("Please enter state type \n 1. Blinker \n 2. Glider Gun \n 3. Random \n 4. Personal \n Please enter your choice: "))
-    time_steps = int(input("Please enter number of steps to run the program: "))
-    boardHistory = []
-    historyRequired = False
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-si", "--size", help="Enter size of the board", type=int)
+    parser.add_argument("-st", "--state", help="Please enter the state", type=int)
+    parser.add_argument("-ts", "--time_steps", help="Enter time steps to run the program", type=int)
+    parser.add_argument('--feature', "--board_history", default=False, action='store_true')
+    args = parser.parse_args()
     
+    size = args.size
+    states = args.state
+    time_steps = args.time_steps
+
+
+    boardHistory = []
     object_two = GameofLifeTwo(size)
 
     if states == 3:
@@ -100,16 +107,16 @@ if __name__ == '__main__':
     
 
     def gridHistory():
-        if historyRequired:
-            for i in range(0, time_steps+1):
-                dataFromBoard = object_two.conway_assignment_two()
-                boardHistory.append(dataFromBoard)
-                return boardHistory
-        else:
-            return 0
+        for i in range(time_steps):
+            dataFromBoard = object_two.conway_assignment_two()
+            boardHistory.append(dataFromBoard)
+        return boardHistory
+       
 
-    
-    print(gridHistory())
+    if args.feature:
+        print(gridHistory())
+    else:
+        print(0)
 
 
     
