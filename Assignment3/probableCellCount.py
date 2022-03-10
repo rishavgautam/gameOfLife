@@ -14,13 +14,11 @@ class GameofLifeThree(object):
         self.rows = int(size)
         self.size = size
         self.grid_array = np.full((size, size), 0)
-        self.ticks = 0
         
     def random(self):
         for x in range(self.rows):
             for y in range(self.columns):
                 self.grid_array[x][y] = np.random.choice((0,1), p=[0.5, 0.5])
-                # self.grid_array[x][y] = random.randint(0,1)
         return self.grid_array
 
   
@@ -45,17 +43,13 @@ class GameofLifeThree(object):
 
         new_grid = np.full(size ** 2, 0)
         new_grid[newly_born | survived] = 1
-        self.ticks +=1
         d = new_grid.reshape((size, size))
         alv = np.count_nonzero(d)
         non_alv = (size*size) - alv
         return new_grid.reshape((size, size)), alv, non_alv
 
     
-    def getTicks(self):
-        return self.ticks
-
-    
+   
     
     
     def get_neighbors(self, x, y):

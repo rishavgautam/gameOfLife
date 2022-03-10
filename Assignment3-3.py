@@ -267,14 +267,14 @@ if __name__ == '__main__':
     asd = animation.FuncAnimation(fig, plotData, interval=50)
 
 
-    # def gridHistory():
-    #     if historyRequired:
-    #         for i in range(0, time_steps+1):
-    #             dataFromBoard = object_two.conway_assignment_two()
-    #             boardHistory.append(dataFromBoard)
-    #             return boardHistory
-    #     else:
-    #         return 0
+    def gridHistory():
+        if historyRequired:
+            for i in range(0, time_steps+1):
+                dataFromBoard = object_two.conway_assignment_two()
+                boardHistory.append(dataFromBoard)
+                return boardHistory
+        else:
+            return 0
 
     
 
