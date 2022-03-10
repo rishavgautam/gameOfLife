@@ -114,9 +114,9 @@ class GameofLifeThree(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("-si", "--size", help="Enter size of the board", type=int)
-    parser.add_argument("-st", "--state", help="Please enter the state", type=int)
-    parser.add_argument("-ts", "--time_steps", help="Enter time steps to run the program", type=int)
+    parser.add_argument("-si", "--size", help="Enter size of the board (eg. 100 or 150 or 750)", type=int)
+    parser.add_argument("-st", "--state", help="Please enter state type \n 1. Blinker \n 2. Glider Gun \n 3. Random \n 4. Personal \n Please enter your choice:", type=int)
+    parser.add_argument("-ts", "--time_steps", help="Enter time times to run the program (eg. 100, 200..)", type=int)
 
     args = parser.parse_args()
 
