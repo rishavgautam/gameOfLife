@@ -1,3 +1,4 @@
+from cProfile import label
 import numpy as np
 import random
 import datetime
@@ -74,54 +75,42 @@ class GameofLifeThree(object):
 
 if __name__ == '__main__':
     size = 100
-    time_steps = 500
+    time_steps = 200
     object_three = GameofLifeThree(size)
     gridBoard = object_three.random()
     alive = []
     dead = []
-    
+    timeData = []
+
     t1= datetime.datetime.now() #Gives initial time when the simulation starts
-   
+    
+
     def visualize(frameNum):
         global gridBoard
-        gridBoard, alv, nonAlv = object_three.conway_assignment_three(gridBoard)
-        # im1.set_data(nonAlv)
-        
+        gridBoard, alv, nonAlv = object_three.conway_assignment_three(gridBoard)        
         alive.append(alv)
         dead.append(nonAlv)
-
-
+        timeData.append(frameNum)
         
-        if object_three.getTicks() > time_steps:
+
+        ax1.plot(timeData, alive, color = 'g', label="Alive")
+        ax1.plot(timeData, dead, color = 'r', label="Dead")
+
+        if frameNum == size:
             plt.close()
-        
-        
-        # ax1.plot(frameNum, alv)
-
-        # plt.xticks(rotation=45, ha='right')
-        # plt.subplots_adjust(bottom=0.30)
-        
-        # plt.ylabel('Aive and Dead Cells')
-        # plt.xlabel('Time Steps')
+        return alv, nonAlv
 
 
-        ax1.clear()
-        ax1.plot(alive, dead)
-
-
-        return alv
-
-
-    print(alive)
-    style.use('fivethirtyeight')
-    fig = plt.figure()
+    style.use('seaborn')
+    fig = plt.figure(figsize=(12, 7))
     ax1 = fig.add_subplot(1,1,1)
 
-    ax1.set_title('Conway Assignment Three')
+    ax1.set_title('Alive vs Dead Cell')
+
+    plt.xlabel("Number of time steps")
+    plt.ylabel("Alive vs Dead Count")
     ani = animation.FuncAnimation(fig, visualize, interval=50)
     plt.show()
 
     t2 = datetime.datetime.now()
     diff = t2.second - t1.second
-
- 

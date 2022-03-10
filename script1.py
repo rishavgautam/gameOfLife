@@ -3,8 +3,6 @@ import random
 import datetime
 import matplotlib.pyplot as plt 
 import matplotlib.animation as animation
-from matplotlib import style
-
 
 
 class GameofLifeThree(object):
@@ -48,13 +46,18 @@ class GameofLifeThree(object):
         d = new_grid.reshape((size, size))
         alv = np.count_nonzero(d)
         non_alv = (size*size) - alv
+    
+        
         return new_grid.reshape((size, size)), alv, non_alv
 
     
     def getTicks(self):
         return self.ticks
 
-    
+    def getPopulation(self):
+        alive = self.alv
+        dead = self.non_alv
+        return alive, dead
     
     
     def get_neighbors(self, x, y):
@@ -74,51 +77,31 @@ class GameofLifeThree(object):
 
 if __name__ == '__main__':
     size = 100
-    time_steps = 500
+    time_steps = 50
     object_three = GameofLifeThree(size)
     gridBoard = object_three.random()
-    alive = []
-    dead = []
+   
     
     t1= datetime.datetime.now() #Gives initial time when the simulation starts
-   
+
     def visualize(frameNum):
-        global gridBoard
+        global gridBoard, im1
+        alvx = []
         gridBoard, alv, nonAlv = object_three.conway_assignment_three(gridBoard)
-        # im1.set_data(nonAlv)
-        
-        alive.append(alv)
-        dead.append(nonAlv)
-
-
-        
+        im1.set_data(gridBoard)
+                
         if object_three.getTicks() > time_steps:
             plt.close()
-        
-        
-        # ax1.plot(frameNum, alv)
 
-        # plt.xticks(rotation=45, ha='right')
-        # plt.subplots_adjust(bottom=0.30)
-        
-        # plt.ylabel('Aive and Dead Cells')
-        # plt.xlabel('Time Steps')
+        return alvx
 
 
-        ax1.clear()
-        ax1.plot(alive, dead)
-
-
-        return alv
-
-
-    print(alive)
-    style.use('fivethirtyeight')
-    fig = plt.figure()
-    ax1 = fig.add_subplot(1,1,1)
-
+    fig1, ax1 = plt.subplots()
+    mat1 = ax1.matshow(gridBoard)
+    im1 = plt.imshow(gridBoard, cmap ='Blues')
     ax1.set_title('Conway Assignment Three')
-    ani = animation.FuncAnimation(fig, visualize, interval=50)
+    
+    _ = animation.FuncAnimation(fig1, visualize, interval=50)
     plt.show()
 
     t2 = datetime.datetime.now()
